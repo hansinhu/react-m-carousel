@@ -1348,16 +1348,13 @@ __WEBPACK_IMPORTED_MODULE_8_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_7_re
 
 
 /**
- * @props speed, interVal
- * @author <xinghanhu@clubfactory.com>
+ * @author <hansincn@gmail.com>
+ * @param
+ * dots, autoplay, edgeEasing, speed, interVal
  * @example
  * <CarouselBanner>
- *  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
- *     <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181207_banner_jpgwinter/banner.jpg" alt=""/>
- *  </a>
- *  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
- *    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181210_banner_coat/banner.jpg" alt=""/>
- *  </a>
+ *  <Item1/>
+ *  <Item2>
  * </CarouselBanner>
  */
 
@@ -1397,9 +1394,7 @@ var Carousel = function (_Component) {
             _this.stopAutoplay();
             _this.initCarousel();
             setTimeout(function () {
-                if (_this.props.autoplay) {
-                    _this.unpauseAutoplay();
-                }
+                _this.unpauseAutoplay();
             }, 1000);
         };
         _this.objType = function (obj) {
@@ -1510,9 +1505,7 @@ var Carousel = function (_Component) {
             }
         };
         _this.handleMouseOut = function () {
-            if (_this.props.autoplay) {
-                _this.unpauseAutoplay();
-            }
+            _this.unpauseAutoplay();
         };
         _this.handleMouseOver = function () {
             _this.stopAutoplay();
@@ -1646,7 +1639,6 @@ var Carousel = function (_Component) {
             var len = children.length;
             var copyFist = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[0]);
             var copyLast = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[len - 1]);
-            // console.log(item0, item1)
             var childrenList = [copyLast].concat(children).concat(copyFist);
             return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("ul", __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({ ref: _this.$carouselList, style: listStyle }, touchEvents, mouseEvents, { onClickCapture: _this.handleClick, className: 'rmc_carousel_list' }), childrenList.map(function (child, i) {
                 return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("li", { style: itemStyles[i], className: 'rmc_carousel_item', key: i + '-carousel' }, child);
@@ -1693,13 +1685,14 @@ var Carousel = function (_Component) {
     __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Carousel, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var children = this.props.children;
+            var _props = this.props,
+                children = _props.children,
+                autoplay = _props.autoplay;
 
-            console.log(children);
             if (this.objType(children) === 'Array') {
                 this.initCarousel();
                 window.addEventListener('resize', this.onResize);
-                this.startAutoplay();
+                autoplay && this.startAutoplay();
             }
         }
     }, {
