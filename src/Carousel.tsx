@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import * as styles from './CarouselBanner.less'
+import 'rmc-m-carousel/assets/index.less'
 
 /**
- * @author <xinghanhu@clubfactory.com>
+ * @author <hansincn@gmail.com>
  * @param 
  * dots, autoplay, edgeEasing, speed, interVal
  * @example
@@ -349,7 +349,7 @@ class Carousel extends Component {
   // 轮播图渲染
   renderChildren = () => {
     let { listStyle, itemStyles } = this.state
-    let { children } = this.props
+    let { children = [] } = this.props
     const touchEvents = this.getTouchEvents()
     const mouseEvents = this.getMouseEvents()
     if (!children) {
@@ -358,8 +358,8 @@ class Carousel extends Component {
     // 一个children返回Object'
     if (this.objType(children) === 'Object') {
       return (
-        <ul className={styles.cf_carousel_list}>
-          <li className={`${styles.cf_carousel_item} ${styles.cf_carousel_single_item}`}>{children}</li>
+        <ul className={'rmc_carousel_list'}>
+          <li className={`rmc_carousel_item rmc_carousel_single_item`}>{children}</li>
         </ul>
       )
     }
@@ -375,9 +375,9 @@ class Carousel extends Component {
         {...touchEvents}
         {...mouseEvents}
         onClickCapture={this.handleClick}
-        className={styles.cf_carousel_list}>{
+        className={'rmc_carousel_list'}>{
           childrenList.map((child, i) => {
-            return <li style={ itemStyles[i] } className={styles.cf_carousel_item} key={i + '-carousel'}>{child}</li>
+            return <li style={ itemStyles[i] } className={'rmc_carousel_item'} key={i + '-carousel'}>{child}</li>
           })
         }</ul>
     )
@@ -385,15 +385,15 @@ class Carousel extends Component {
 
   // 指示器渲染
   rederDot = () => {
-    let { children } = this.props
+    let { children = [] } = this.props
     if (this.objType(children) === 'Object' || !children) {
       return null
     }
     return (
-      <div className={styles.cf_carousel_dot}>
+      <div className={'rmc_carousel_dot'}>
         {
           children.map((page, i) => {
-            let dotClassName = `${styles.cf_carousel_dot_point} ${i === this.state.activeIndex ? styles.cf_dot_point_active : ''}`
+            let dotClassName = `${'rmc_carousel_dot_point'} ${i === this.state.activeIndex ? 'rmc_dot_point_active' : ''}`
             return <div onClick={() => this.dotClick(i)} className={ dotClassName } key={i}><span></span></div>
           })
         }
@@ -406,7 +406,7 @@ class Carousel extends Component {
     return (
       <div
         ref={ this.$carousel }
-        className={styles.cf_carousel}>
+        className={'rmc_carousel'}>
         { this.renderChildren() }
         { dots ? this.rederDot() : null }
       </div>)
