@@ -22,7 +22,7 @@ node_modules
 .cache
 dist
 *.css
-build
+#build
 lib
 /coverage
 yarn.lock
