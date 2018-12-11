@@ -15,7 +15,7 @@ React Mobile Carousel Component (web and react-native)
 
 ## Screenshots
 
-<img src="https://github.com/hansinhu/react-m-carousel/blob/master/assets/img/demoimg.png" width="288"/>
+<img src="https://github.com/hansinhu/react-m-carousel/blob/master/assets/img/demoimg.png?raw=true" width="288"/>
 
 ## Usage
 ```
