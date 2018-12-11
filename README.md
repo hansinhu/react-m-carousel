@@ -6,11 +6,12 @@ React Mobile Carousel Component (web and react-native)
 
 ![react](https://img.shields.io/badge/react-%3E%3D_16.0.0-green.svg)
 [![node version][node-image]][node-url]
-[![npm download]][download-url]
+[![npm download][download-img]][download-url]
 
 [npm-url]: http://npmjs.org/package/carousel
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
+[download-img]: https://img.shields.io/npm/dm/rmc-m-carousel.svg?style=flat-square
 [download-url]: https://npmjs.org/package/rmc-m-carousel
 
 ## Screenshots
@@ -30,12 +31,6 @@ import Carousel from 'rmc-m-carousel';
   </a>
   <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
     <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181210_banner_coat/banner.jpg" alt=""/>
-  </a>
-  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
-    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181210_banner_sleep/banner.jpg" alt=""/>
-  </a>
-  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
-    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181207_banner_ethnicwear/banner.jpg" alt=""/>
   </a>
 </Carousel>
 
@@ -57,7 +52,7 @@ http://localhost:8000/examples/
 
 ## install
 
-[![rmc-m-carousel]](https://npmjs.org/package/rmc-m-carousel)
+[![npm download][download-img]][download-url]
 
 
 ## API
