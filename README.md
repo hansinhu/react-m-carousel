@@ -15,11 +15,34 @@ React Mobile Carousel Component (web and react-native)
 
 ## Screenshots
 
-<img src="https://github.com/hansinhu/react-m-carousel/assets/img/demoimg.png" width="288"/>
+<img src="https://github.com/hansinhu/react-m-carousel/blob/master/assets/img/demoimg.png" width="288"/>
 
 ## Usage
+```
+npm install rmc-m-carousel
+```
+```
+import Carousel from 'rmc-m-carousel';
 
-see example
+<Carousel>
+  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
+    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181207_banner_jpgwinter/banner.jpg" alt=""/>
+  </a>
+  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
+    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181210_banner_coat/banner.jpg" alt=""/>
+  </a>
+  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
+    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181210_banner_sleep/banner.jpg" alt=""/>
+  </a>
+  <a target="_blank" rel="nofollow me noopener noreferrer" href="https://www.baidu.com">
+    <img src="//d3kpm7yklociqe.cloudfront.net/ext/theme/20181207_banner_ethnicwear/banner.jpg" alt=""/>
+  </a>
+</Carousel>
+
+```
+
+[see example](https://github.com/hansinhu/react-m-carousel/blob/master/examples/demo.tsx)
+
 
 ## Development
 
@@ -43,7 +66,7 @@ http://localhost:8000/examples/
 
 | name     | description    | type     | default      |
 |----------|----------------|----------|--------------|
-|dots | show dots or not | Boolean | '' | true
+|dots | show dots or not | Boolean | true |
 |autoplay | autoplay or not | Boolean | true |
 |edgeEasing | transition type | String | 'linear' |
 |speed | transition speed | Number | 500 |
