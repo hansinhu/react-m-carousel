@@ -1,65 +1,52 @@
-.rmc_carousel{
+@cfCarouselCl: cf_carousel;
+.@{cfCarouselCl}{
   position: relative;
   overflow: hidden;
-  .rmc_carousel_list{
+  &_list{
     position: relative;
-    display: block;
+    display: flex;
     margin: 0px;
     padding: 0px;
     cursor: inherit;
     box-sizing: border-box;
-    &::before{
-      content: "";
-      display: table;
-    }
-    &::after{
-      content: "";
-      display: table;
-      clear: both;
-    }
-    .rmc_carousel_item{
-      touch-action: none;
-      top: 0px;
+  }
+  &_item{
+    touch-action: none;
+    vertical-align: top;
+    text-align: center;
+    height: auto;
+    box-sizing: border-box;
+    &_inner{
       display: inline-block;
-      list-style-type: none;
-      vertical-align: top;
-      text-align: center;
-      height: auto;
-      box-sizing: border-box;
-      margin: auto 0px;
-      &::after{
-        content: "";
-        display: table;
-        clear: both;
-      }
-      img{
-        max-width: 100%;
-      }
     }
-    .rmc_carousel_single_item{
+    img{
       width: 100%;
+      display: block;
     }
   }
-  .rmc_carousel_dot{
+  &_single_item{
+    width: 100%;
+  }
+  &_dot{
     position: absolute;
     bottom: 10px;
     width: 100%;
     text-align: center;
-    .rmc_carousel_dot_point{
-      display: inline-block;
-      zoom: 1;
+  }
+  &_dot_point{
+    display: inline-block;
+    zoom: 1;
+    span{
+      display: block;
+      width: .5rem;
+      height: .5rem;
+      margin: 0 .3rem;
+      border-radius: 50%;
+      background: #ccc;
+    }
+    &.cf_dot_point_active{
       span{
-        display: block;
-        width: .5rem;
-        height: .5rem;
-        margin: 0 .3rem;
-        border-radius: 50%;
-        background: #ccc;
-      }
-      &.rmc_dot_point_active{
-        span{
-          background: #f15440;
-        }
+        background: #f15440;
       }
     }
   }

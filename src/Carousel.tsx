@@ -213,12 +213,12 @@ class Carousel extends Component {
     };
   }
 
-  // 阻止鼠标的默认事件
+  // 阻止默认事件
   handleClick = (event) => {
     if (this.clickDisabled === true) {
-      if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) {
-        return;
-      }
+      // if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) {
+      //   return;
+      // }
       event.preventDefault();
       event.stopPropagation();
 
@@ -358,9 +358,9 @@ class Carousel extends Component {
     // 一个children返回Object'
     if (this.objType(children) === 'Object') {
       return (
-        <ul className={'rmc_carousel_list'}>
-          <li className={`rmc_carousel_item rmc_carousel_single_item`}>{children}</li>
-        </ul>
+        <div className={'rmc_carousel_list'}>
+          <div className={`rmc_carousel_item rmc_carousel_single_item`}>{children}</div>
+        </div>
       )
     }
     // 多个返回Array
@@ -369,7 +369,7 @@ class Carousel extends Component {
     let copyLast = React.cloneElement(children[len - 1])
     let childrenList = [copyLast].concat(children).concat(copyFist)
     return (
-      <ul
+      <div
         ref={this.$carouselList}
         style={ listStyle }
         {...touchEvents}
@@ -377,9 +377,9 @@ class Carousel extends Component {
         onClickCapture={this.handleClick}
         className={'rmc_carousel_list'}>{
           childrenList.map((child, i) => {
-            return <li style={ itemStyles[i] } className={'rmc_carousel_item'} key={i + '-carousel'}>{child}</li>
+            return <div style={ itemStyles[i] } className={'rmc_carousel_item'} key={i + '-carousel'}>{child}</div>
           })
-        }</ul>
+        }</div>
     )
   }
 
