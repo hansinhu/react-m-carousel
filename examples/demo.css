@@ -62,61 +62,48 @@
   border-top: 1PX solid #ddd;
   border-bottom: 1PX solid #ddd;
 }
-.rmc_carousel {
+.cf_carousel {
   position: relative;
   overflow: hidden;
 }
-.rmc_carousel .rmc_carousel_list {
+.cf_carousel_list {
   position: relative;
-  display: block;
+  display: -ms-flexbox;
+  display: flex;
   margin: 0px;
   padding: 0px;
   cursor: inherit;
   box-sizing: border-box;
 }
-.rmc_carousel .rmc_carousel_list::before {
-  content: "";
-  display: table;
-}
-.rmc_carousel .rmc_carousel_list::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-.rmc_carousel .rmc_carousel_list .rmc_carousel_item {
+.cf_carousel_item {
   -ms-touch-action: none;
       touch-action: none;
-  top: 0px;
-  display: inline-block;
-  list-style-type: none;
   vertical-align: top;
   text-align: center;
   height: auto;
   box-sizing: border-box;
-  margin: auto 0px;
 }
-.rmc_carousel .rmc_carousel_list .rmc_carousel_item::after {
-  content: "";
-  display: table;
-  clear: both;
+.cf_carousel_item_inner {
+  display: inline-block;
 }
-.rmc_carousel .rmc_carousel_list .rmc_carousel_item img {
-  max-width: 100%;
+.cf_carousel_item img {
+  width: 100%;
+  display: block;
 }
-.rmc_carousel .rmc_carousel_list .rmc_carousel_single_item {
+.cf_carousel_single_item {
   width: 100%;
 }
-.rmc_carousel .rmc_carousel_dot {
+.cf_carousel_dot {
   position: absolute;
   bottom: 10px;
   width: 100%;
   text-align: center;
 }
-.rmc_carousel .rmc_carousel_dot .rmc_carousel_dot_point {
+.cf_carousel_dot_point {
   display: inline-block;
   zoom: 1;
 }
-.rmc_carousel .rmc_carousel_dot .rmc_carousel_dot_point span {
+.cf_carousel_dot_point span {
   display: block;
   width: .5rem;
   height: .5rem;
@@ -124,7 +111,7 @@
   border-radius: 50%;
   background: #ccc;
 }
-.rmc_carousel .rmc_carousel_dot .rmc_carousel_dot_point.rmc_dot_point_active span {
+.cf_carousel_dot_point.cf_dot_point_active span {
   background: #f15440;
 }
 

@@ -1491,12 +1491,12 @@ var Carousel = function (_Component) {
                 }
             };
         };
-        // 阻止鼠标的默认事件
+        // 阻止默认事件
         _this.handleClick = function (event) {
             if (_this.clickDisabled === true) {
-                if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) {
-                    return;
-                }
+                // if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) {
+                //   return;
+                // }
                 event.preventDefault();
                 event.stopPropagation();
                 if (event.nativeEvent) {
@@ -1633,15 +1633,15 @@ var Carousel = function (_Component) {
             }
             // 一个children返回Object'
             if (_this.objType(children) === 'Object') {
-                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("ul", { className: 'rmc_carousel_list' }, __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("li", { className: 'rmc_carousel_item rmc_carousel_single_item' }, children));
+                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { className: 'rmc_carousel_list' }, __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { className: 'rmc_carousel_item rmc_carousel_single_item' }, children));
             }
             // 多个返回Array
             var len = children.length;
             var copyFist = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[0]);
             var copyLast = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[len - 1]);
             var childrenList = [copyLast].concat(children).concat(copyFist);
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("ul", __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({ ref: _this.$carouselList, style: listStyle }, touchEvents, mouseEvents, { onClickCapture: _this.handleClick, className: 'rmc_carousel_list' }), childrenList.map(function (child, i) {
-                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("li", { style: itemStyles[i], className: 'rmc_carousel_item', key: i + '-carousel' }, child);
+            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({ ref: _this.$carouselList, style: listStyle }, touchEvents, mouseEvents, { onClickCapture: _this.handleClick, className: 'rmc_carousel_list' }), childrenList.map(function (child, i) {
+                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { style: itemStyles[i], className: 'rmc_carousel_item', key: i + '-carousel' }, child);
             }));
         };
         // 指示器渲染
