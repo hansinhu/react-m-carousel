@@ -1347,8 +1347,10 @@ __WEBPACK_IMPORTED_MODULE_8_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_7_re
 
 
 
+
+
 /**
- * @author <hansincn@gmail.com>
+ * @author <xinghanhu@clubfactory.com>
  * @param
  * dots, autoplay, edgeEasing, speed, interVal
  * @example
@@ -1359,375 +1361,471 @@ __WEBPACK_IMPORTED_MODULE_8_react_dom__["render"](__WEBPACK_IMPORTED_MODULE_7_re
  */
 
 var Carousel = function (_Component) {
-    __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(Carousel, _Component);
+  __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(Carousel, _Component);
 
-    function Carousel() {
-        __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, Carousel);
+  function Carousel() {
+    __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, Carousel);
 
-        // 初始化数据
-        var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).apply(this, arguments));
+    var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).apply(this, arguments));
 
-        _this.initCarousel = function () {
-            var childNodes = _this.$carouselList.current.childNodes || [];
-            _this.nodeNum = childNodes.length;
-            _this.childNum = _this.nodeNum > 2 ? _this.nodeNum - 2 : 0;
-            // 轮播宽度
-            var frameWidth = _this.$carousel.current.clientWidth;
-            var width = frameWidth * _this.nodeNum + 'px';
-            // li 的样式
-            var itemStyles = [];
-            childNodes.forEach(function (el, i) {
-                itemStyles.push({
-                    width: frameWidth + 'px'
-                });
-            });
-            var x = (_this.state.activeIndex + 1) * frameWidth;
-            var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, { width: width }, _this.getTransitionStyle(0, x));
+    _this.initCarousel = function () {
+      var childNodes = _this.$carouselList.current.childNodes || [];
+      _this.nodeNum = childNodes.length;
+      _this.childNum = _this.nodeNum > 2 ? _this.nodeNum - 2 : 0;
+      // 轮播宽度
+      var frameWidth = _this.$carousel.current.clientWidth;
+      var width = frameWidth * _this.nodeNum + 'px';
+      // li 的样式
+      var itemStyles = [];
+      childNodes.forEach(function (el, i) {
+        itemStyles.push({
+          width: frameWidth + 'px'
+        });
+      });
+      var x = (_this.state.activeIndex + 1) * frameWidth;
+      var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, { width: width }, _this.getTransitionStyle(0, x));
+      _this.setState({
+        frameWidth: frameWidth,
+        listStyle: listStyle,
+        itemStyles: itemStyles
+      });
+    };
+
+    _this.onResize = function () {
+      _this.stopAutoplay();
+      _this.initCarousel();
+      setTimeout(function () {
+        _this.unpauseAutoplay();
+      }, 1000);
+    };
+
+    _this.objType = function (obj) {
+      return Object.prototype.toString.call(obj).slice(8, -1);
+    };
+
+    _this.getTouchEvents = function () {
+      return {
+        onTouchStart: function onTouchStart(e) {
+          _this.touchObject = {
+            startX: e.touches[0].pageX,
+            startY: e.touches[0].pageY
+          };
+          _this.handleMouseOver();
+        },
+        onTouchMove: function onTouchMove(e) {
+          e.preventDefault();
+          var length = Math.round(Math.sqrt(Math.pow(e.touches[0].pageX - _this.touchObject.startX, 2)));
+          // 移动距离 %
+          var process = length / _this.state.frameWidth * 100;
+          if (process >= 5) _this.clickDisabled = true;
+
+          _this.touchObject = {
+            startX: _this.touchObject.startX,
+            startY: _this.touchObject.startY,
+            endX: e.touches[0].pageX,
+            endY: e.touches[0].pageY,
+            length: length
+          };
+          var moveLeft = _this.touchObject.endX - _this.touchObject.startX;
+          _this.setState({
+            moveLeft: moveLeft
+          });
+          _this.handleSwiping(moveLeft);
+        },
+        onTouchEnd: function onTouchEnd(e) {
+          _this.handleSwipe(e);
+          _this.handleMouseOut();
+        },
+        onTouchCancel: function onTouchCancel(e) {
+          _this.handleSwipe(e);
+        }
+      };
+    };
+
+    _this.getMouseEvents = function () {
+      return {
+        onMouseOver: function onMouseOver() {
+          return _this.handleMouseOver();
+        },
+
+        onMouseOut: function onMouseOut() {
+          return _this.handleMouseOut();
+        },
+
+        onMouseDown: function onMouseDown(e) {
+          if (e.preventDefault) {
+            e.preventDefault();
+          }
+
+          _this.touchObject = {
+            startX: e.clientX,
+            startY: e.clientY
+          };
+
+          _this.setState({
+            dragging: true
+          });
+        },
+        onMouseMove: function onMouseMove(e) {
+          if (!_this.state.dragging) {
+            return;
+          }
+
+          var length = Math.round(Math.sqrt(Math.pow(e.clientX - _this.touchObject.startX, 2)));
+
+          // prevents disabling click just because mouse moves a fraction of a pixel
+          // 移动距离 %
+          var process = length / _this.state.frameWidth * 100;
+          if (process >= 5) _this.clickDisabled = true;
+
+          _this.touchObject = {
+            startX: _this.touchObject.startX,
+            startY: _this.touchObject.startY,
+            endX: e.clientX,
+            endY: e.clientY,
+            length: length
+          };
+
+          var moveLeft = _this.touchObject.endX - _this.touchObject.startX;
+          _this.setState({
+            moveLeft: moveLeft
+          });
+          _this.handleSwiping(moveLeft);
+        },
+        onMouseUp: function onMouseUp(e) {
+          if (!_this.state.dragging) {
+            return;
+          }
+
+          _this.handleSwipe(e);
+        },
+        onMouseLeave: function onMouseLeave(e) {
+          if (!_this.state.dragging) {
+            return;
+          }
+
+          _this.handleSwipe(e);
+        }
+      };
+    };
+
+    _this.handleClick = function (event) {
+      if (_this.clickDisabled === true) {
+        // if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) {
+        //   return;
+        // }
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (event.nativeEvent) {
+          event.nativeEvent.stopPropagation();
+        }
+      }
+    };
+
+    _this.handleMouseOut = function () {
+      _this.unpauseAutoplay();
+    };
+
+    _this.handleMouseOver = function () {
+      _this.stopAutoplay();
+    };
+
+    _this.stopAutoplay = function () {
+      _this.stopPlay = true;
+      if (_this.autoTimer) {
+        clearInterval(_this.autoTimer);
+      }
+    };
+
+    _this.unpauseAutoplay = function () {
+      if (_this.props.autoplay && _this.stopPlay) {
+        _this.startAutoplay();
+        _this.stopPlay = false;
+      }
+    };
+
+    _this.handleSwiping = function (left) {
+      var activeIndex = _this.state.activeIndex;
+      // 第一项和最后一线暂时不可拖动, 待完善
+      var x = (activeIndex + 1) * _this.state.frameWidth - left;
+      var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(0, x));
+      _this.setState({
+        listStyle: listStyle
+      });
+    };
+
+    _this.handleSwipe = function () {
+      var left = _this.state.moveLeft;
+      var activeIndex = _this.state.activeIndex;
+      // 移动距离大于10% 否则还原
+      var process = Math.abs(left) / _this.state.frameWidth * 100;
+      if (process > 10 && left > 0) {
+        // 上一项
+        _this.changePositon(activeIndex === 0 ? _this.childNum - 1 : --activeIndex, 'pre');
+      } else if (process > 10 && left < 0) {
+        // 下一项
+        _this.changePositon(activeIndex === _this.childNum - 1 ? 0 : ++activeIndex);
+      } else {
+        _this.changePositon(activeIndex);
+      }
+      setTimeout(function () {
+        _this.clickDisabled = false;
+      }, 0);
+      _this.touchObject = {};
+      _this.setState({
+        dragging: false
+      });
+    };
+
+    _this.startAutoplay = function () {
+      if (_this.autoTimer) clearInterval(_this.autoTimer);
+      _this.autoTimer = setInterval(function () {
+        if (_this.stopPlay) return;
+        _this.changePositon();
+      }, _this.props.interVal);
+    };
+
+    _this.dotClick = function (index) {
+      _this.stopAutoplay();
+      _this.changePositon(index);
+      _this.unpauseAutoplay();
+    };
+
+    _this.changePositon = function (nexIndex, step) {
+      var activeIndex = _this.state.activeIndex;
+      var speed = _this.props.speed;
+
+      var index = void 0;
+      if (nexIndex !== undefined) {
+        index = nexIndex;
+      } else {
+        index = activeIndex >= _this.childNum - 1 ? 0 : ++activeIndex;
+      }
+      // infinite效果 最后一项单独处理
+      if (index === 0 && activeIndex === _this.childNum - 1 && step !== 'pre') {
+        var x = (activeIndex + 2) * _this.state.frameWidth;
+        var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(speed, x));
+        _this.setState({ // 在整体向左移动
+          listStyle: listStyle,
+          activeIndex: index
+        }, function () {
+          // 最后复原
+          var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(0, _this.state.frameWidth));
+          setTimeout(function () {
             _this.setState({
-                frameWidth: frameWidth,
-                listStyle: listStyle,
-                itemStyles: itemStyles
+              listStyle: listStyle
             });
-        };
-        // window宽度改变，重新计算banner宽度
-        _this.onResize = function () {
-            _this.stopAutoplay();
-            _this.initCarousel();
-            setTimeout(function () {
-                _this.unpauseAutoplay();
-            }, 1000);
-        };
-        _this.objType = function (obj) {
-            return Object.prototype.toString.call(obj).slice(8, -1);
-        };
-        // 移动端touch相关操作
-        _this.getTouchEvents = function () {
-            return {
-                onTouchStart: function onTouchStart(e) {
-                    _this.touchObject = {
-                        startX: e.touches[0].pageX,
-                        startY: e.touches[0].pageY
-                    };
-                    _this.handleMouseOver();
-                },
-                onTouchMove: function onTouchMove(e) {
-                    e.preventDefault();
-                    var length = Math.round(Math.sqrt(Math.pow(e.touches[0].pageX - _this.touchObject.startX, 2)));
-                    if (length >= 10) _this.clickDisabled = true;
-                    _this.touchObject = {
-                        startX: _this.touchObject.startX,
-                        startY: _this.touchObject.startY,
-                        endX: e.touches[0].pageX,
-                        endY: e.touches[0].pageY,
-                        length: length
-                    };
-                    var moveLeft = _this.touchObject.endX - _this.touchObject.startX;
-                    _this.setState({
-                        moveLeft: moveLeft
-                    });
-                    _this.handleSwiping(moveLeft);
-                },
-                onTouchEnd: function onTouchEnd(e) {
-                    _this.handleSwipe(e);
-                    _this.handleMouseOut();
-                },
-                onTouchCancel: function onTouchCancel(e) {
-                    _this.handleSwipe(e);
-                }
-            };
-        };
-        // web Mouse相关操作
-        _this.getMouseEvents = function () {
-            return {
-                onMouseOver: function onMouseOver() {
-                    return _this.handleMouseOver();
-                },
-                onMouseOut: function onMouseOut() {
-                    return _this.handleMouseOut();
-                },
-                onMouseDown: function onMouseDown(e) {
-                    if (e.preventDefault) {
-                        e.preventDefault();
-                    }
-                    _this.touchObject = {
-                        startX: e.clientX,
-                        startY: e.clientY
-                    };
-                    _this.setState({
-                        dragging: true
-                    });
-                },
-                onMouseMove: function onMouseMove(e) {
-                    if (!_this.state.dragging) {
-                        return;
-                    }
-                    var length = Math.round(Math.sqrt(Math.pow(e.clientX - _this.touchObject.startX, 2)));
-                    // prevents disabling click just because mouse moves a fraction of a pixel
-                    if (length >= 10) _this.clickDisabled = true;
-                    _this.touchObject = {
-                        startX: _this.touchObject.startX,
-                        startY: _this.touchObject.startY,
-                        endX: e.clientX,
-                        endY: e.clientY,
-                        length: length
-                    };
-                    var moveLeft = _this.touchObject.endX - _this.touchObject.startX;
-                    _this.setState({
-                        moveLeft: moveLeft
-                    });
-                    _this.handleSwiping(moveLeft);
-                },
-                onMouseUp: function onMouseUp(e) {
-                    if (!_this.state.dragging) {
-                        return;
-                    }
-                    _this.handleSwipe(e);
-                },
-                onMouseLeave: function onMouseLeave(e) {
-                    if (!_this.state.dragging) {
-                        return;
-                    }
-                    _this.handleSwipe(e);
-                }
-            };
-        };
-        // 阻止默认事件
-        _this.handleClick = function (event) {
-            if (_this.clickDisabled === true) {
-                // if (event.metaKey || event.shiftKey || event.altKey || event.ctrlKey) {
-                //   return;
-                // }
-                event.preventDefault();
-                event.stopPropagation();
-                if (event.nativeEvent) {
-                    event.nativeEvent.stopPropagation();
-                }
-            }
-        };
-        _this.handleMouseOut = function () {
-            _this.unpauseAutoplay();
-        };
-        _this.handleMouseOver = function () {
-            _this.stopAutoplay();
-        };
-        _this.stopAutoplay = function () {
-            _this.stopPlay = true;
-            if (_this.autoTimer) {
-                clearInterval(_this.autoTimer);
-            }
-        };
-        _this.unpauseAutoplay = function () {
-            if (_this.props.autoplay && _this.stopPlay) {
-                _this.startAutoplay();
-                _this.stopPlay = false;
-            }
-        };
-        // 拖动时移动效果
-        _this.handleSwiping = function (left) {
-            var activeIndex = _this.state.activeIndex;
-            // 第一项和最后一线暂时不可拖动, 待完善
-            var x = (activeIndex + 1) * _this.state.frameWidth - left;
-            var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(0, x));
+          }, speed);
+        });
+      } else if (nexIndex === _this.childNum - 1 && step === 'pre') {
+        // 第一项继续向前滑动
+        var _listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(speed, 0));
+        _this.setState({ // 在整体向左移动
+          listStyle: _listStyle,
+          activeIndex: index
+        }, function () {
+          // 回到末尾
+          var x = (index + 1) * _this.state.frameWidth;
+          var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(0, x));
+          setTimeout(function () {
             _this.setState({
-                listStyle: listStyle
+              listStyle: listStyle
             });
-        };
-        // 拖动后移动效果
-        _this.handleSwipe = function () {
-            var left = _this.state.moveLeft;
-            var activeIndex = _this.state.activeIndex;
-            // 移动距离大于10 否则还原
-            if (Math.abs(left) > 10 && left > 0) {
-                // 上一项
-                _this.changePositon(activeIndex === 0 ? _this.childNum - 1 : --activeIndex, 'pre');
-            } else if (Math.abs(left) > 10 && left < 0) {
-                // 下一项
-                _this.changePositon(activeIndex === _this.childNum - 1 ? 0 : ++activeIndex);
-            } else {
-                _this.changePositon(activeIndex);
-            }
-            setTimeout(function () {
-                _this.clickDisabled = false;
-            }, 0);
-            _this.touchObject = {};
-            _this.setState({
-                dragging: false
-            });
-        };
-        // 自动播放
-        _this.startAutoplay = function () {
-            if (_this.autoTimer) clearInterval(_this.autoTimer);
-            _this.autoTimer = setInterval(function () {
-                if (_this.stopPlay) return;
-                _this.changePositon();
-            }, _this.props.interVal);
-        };
-        // 点击dot
-        _this.dotClick = function (index) {
-            _this.stopAutoplay();
-            _this.changePositon(index);
-            _this.unpauseAutoplay();
-        };
-        // 滚动过渡效果
-        _this.changePositon = function (nexIndex, step) {
-            var activeIndex = _this.state.activeIndex;
-            var speed = _this.props.speed;
+          }, speed);
+        });
+      } else {
+        var _x = (index + 1) * _this.state.frameWidth;
+        var _listStyle2 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(speed, _x));
+        _this.setState({
+          listStyle: _listStyle2,
+          activeIndex: index
+        });
+      }
+    };
 
-            var index = void 0;
-            if (nexIndex !== undefined) {
-                index = nexIndex;
-            } else {
-                index = activeIndex >= _this.childNum - 1 ? 0 : ++activeIndex;
-            }
-            // infinite效果 最后一项单独处理
-            if (index === 0 && activeIndex === _this.childNum - 1 && step !== 'pre') {
-                var x = (activeIndex + 2) * _this.state.frameWidth;
-                var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(speed, x));
-                _this.setState({
-                    listStyle: listStyle,
-                    activeIndex: index
-                }, function () {
-                    var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(0, _this.state.frameWidth));
-                    setTimeout(function () {
-                        _this.setState({
-                            listStyle: listStyle
-                        });
-                    }, speed);
-                });
-            } else if (nexIndex === _this.childNum - 1 && step === 'pre') {
-                // 第一项继续向前滑动
-                var _listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(speed, 0));
-                _this.setState({
-                    listStyle: _listStyle,
-                    activeIndex: index
-                }, function () {
-                    var x = (index + 1) * _this.state.frameWidth;
-                    var listStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(0, x));
-                    setTimeout(function () {
-                        _this.setState({
-                            listStyle: listStyle
-                        });
-                    }, speed);
-                });
-            } else {
-                var _x = (index + 1) * _this.state.frameWidth;
-                var _listStyle2 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, _this.state.listStyle, _this.getTransitionStyle(speed, _x));
-                _this.setState({
-                    listStyle: _listStyle2,
-                    activeIndex: index
-                });
-            }
-        };
-        // 轮播图渲染
-        _this.renderChildren = function () {
-            var _this$state = _this.state,
-                listStyle = _this$state.listStyle,
-                itemStyles = _this$state.itemStyles;
-            var _this$props$children = _this.props.children,
-                children = _this$props$children === undefined ? [] : _this$props$children;
+    _this.renderChildren = function () {
+      var _this$state = _this.state,
+          listStyle = _this$state.listStyle,
+          itemStyles = _this$state.itemStyles;
+      var children = _this.props.children;
 
-            var touchEvents = _this.getTouchEvents();
-            var mouseEvents = _this.getMouseEvents();
-            if (!children) {
-                return null;
-            }
-            // 一个children返回Object'
-            if (_this.objType(children) === 'Object') {
-                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { className: 'rmc_carousel_list' }, __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { className: 'rmc_carousel_item rmc_carousel_single_item' }, children));
-            }
-            // 多个返回Array
-            var len = children.length;
-            var copyFist = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[0]);
-            var copyLast = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[len - 1]);
-            var childrenList = [copyLast].concat(children).concat(copyFist);
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({ ref: _this.$carouselList, style: listStyle }, touchEvents, mouseEvents, { onClickCapture: _this.handleClick, className: 'rmc_carousel_list' }), childrenList.map(function (child, i) {
-                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { style: itemStyles[i], className: 'rmc_carousel_item', key: i + '-carousel' }, child);
-            }));
-        };
-        // 指示器渲染
-        _this.rederDot = function () {
-            var _this$props$children2 = _this.props.children,
-                children = _this$props$children2 === undefined ? [] : _this$props$children2;
+      var touchEvents = _this.getTouchEvents();
+      var mouseEvents = _this.getMouseEvents();
+      if (!children) {
+        return null;
+      }
+      // 一个children返回Object'
+      if (children.length && children.length === 1) {
+        children = children[0];
+      }
+      if (_this.objType(children) === 'Object') {
+        return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+          'div',
+          { className: 'rmc_carousel_list' },
+          __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'div',
+            { className: 'rmc_carousel_item rmc_carousel_single_item' },
+            children
+          )
+        );
+      }
+      // 多个返回Array
+      var len = children.length;
+      var copyFist = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[0]);
+      var copyLast = __WEBPACK_IMPORTED_MODULE_5_react___default.a.cloneElement(children[len - 1]);
+      var childrenList = [copyLast].concat(children).concat(copyFist);
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'div',
+        __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({
+          ref: _this.$carouselList,
+          style: listStyle
+        }, touchEvents, mouseEvents, {
+          onClickCapture: _this.handleClick,
+          className: 'rmc_carousel_list' }),
+        childrenList.map(function (child, i) {
+          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'div',
+            { style: itemStyles[i], className: 'rmc_carousel_item', key: i + '-carousel' },
+            child
+          );
+        })
+      );
+    };
 
-            if (_this.objType(children) === 'Object' || !children) {
-                return null;
-            }
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { className: 'rmc_carousel_dot' }, children.map(function (page, i) {
-                var dotClassName = 'rmc_carousel_dot_point' + ' ' + (i === _this.state.activeIndex ? 'rmc_dot_point_active' : '');
-                return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { onClick: function onClick() {
-                        return _this.dotClick(i);
-                    }, className: dotClassName, key: i }, __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("span", null));
-            }));
-        };
-        _this.touchObject = {};
-        _this.autoTimer = null;
-        _this.resizeTimer = null;
-        _this.stopPlay = false; // 暂停自动轮播
-        _this.clickDisabled = false; // 是否阻止点击事件
-        _this.nodeNum = 0;
-        _this.childNum = 0; // banner的数量
-        _this.state = {
-            frameWidth: 0,
-            activeIndex: 0,
-            listStyle: {
-                height: 'auto',
-                width: '0px'
-            },
-            itemStyles: [],
-            moveLeft: 0,
-            dragging: false
-        };
-        _this.$carouselList = __WEBPACK_IMPORTED_MODULE_5_react___default.a.createRef();
-        _this.$carousel = __WEBPACK_IMPORTED_MODULE_5_react___default.a.createRef();
-        return _this;
+    _this.rederDot = function () {
+      var children = _this.props.children;
+
+      if (_this.objType(children) === 'Object' || !children || children.length === 1) {
+        return null;
+      }
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'div',
+        { className: 'rmc_carousel_dot' },
+        children.map(function (page, i) {
+          var dotClassName = 'rmc_carousel_dot_point' + ' ' + (i === _this.state.activeIndex ? 'rmc_dot_point_active' : '');
+          return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+            'div',
+            { onClick: function onClick() {
+                return _this.dotClick(i);
+              }, className: dotClassName, key: i },
+            __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('span', null)
+          );
+        })
+      );
+    };
+
+    _this.touchObject = {};
+    _this.autoTimer = null;
+    _this.resizeTimer = null;
+    _this.stopPlay = false; // 暂停自动轮播
+    _this.clickDisabled = false; // 是否阻止点击事件
+    _this.nodeNum = 0;
+    _this.childNum = 0; // banner的数量
+    _this.state = {
+      frameWidth: 0, // 轮播区域的宽度
+      activeIndex: 0, // 当前激活项
+      listStyle: { // ul的样式
+        height: 'auto',
+        width: '0px'
+      },
+      itemStyles: [], // li的样式
+      moveLeft: 0, // touchMove的距离
+      dragging: false
+    };
+    _this.$carouselList = __WEBPACK_IMPORTED_MODULE_5_react___default.a.createRef();
+    _this.$carousel = __WEBPACK_IMPORTED_MODULE_5_react___default.a.createRef();
+    return _this;
+  }
+
+  __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Carousel, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _props = this.props,
+          children = _props.children,
+          autoplay = _props.autoplay;
+
+      if (this.objType(children) === 'Array' && children.length > 1) {
+        this.initCarousel();
+        window.addEventListener('resize', this.onResize);
+        autoplay && this.startAutoplay();
+      }
+    }
+  }, {
+    key: 'getTransitionStyle',
+    value: function getTransitionStyle(ms, x) {
+      return {
+        transition: 'transform ' + this.props.edgeEasing + ' ' + ms / 1000 + 's',
+        'WebkitTransition': 'transform ' + this.props.edgeEasing + ' ' + ms / 1000 + 's',
+        transform: 'translate3d(-' + x + 'px, 0px, 0px)',
+        'WebkitTransform': 'translate3d(-' + x + 'px, 0px, 0px)'
+      };
     }
 
-    __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Carousel, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            var _props = this.props,
-                children = _props.children,
-                autoplay = _props.autoplay;
+    // 初始化数据
 
-            if (this.objType(children) === 'Array') {
-                this.initCarousel();
-                window.addEventListener('resize', this.onResize);
-                autoplay && this.startAutoplay();
-            }
-        }
-    }, {
-        key: 'getTransitionStyle',
-        value: function getTransitionStyle(ms, x) {
-            return {
-                transition: 'transform ' + this.props.edgeEasing + ' ' + ms / 1000 + 's',
-                'WebkitTransition': 'transform ' + this.props.edgeEasing + ' ' + ms / 1000 + 's',
-                transform: 'translate3d(-' + x + 'px, 0px, 0px)',
-                'WebkitTransform': 'translate3d(-' + x + 'px, 0px, 0px)'
-            };
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var dots = this.props.dots;
 
-            return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement("div", { ref: this.$carousel, className: 'rmc_carousel' }, this.renderChildren(), dots ? this.rederDot() : null);
-        }
-    }]);
+    // window宽度改变，重新计算banner宽度
 
-    return Carousel;
+
+    // 移动端touch相关操作
+
+
+    // web Mouse相关操作
+
+
+    // 阻止默认事件
+
+    // 拖动时移动效果
+
+    // 拖动后移动效果
+
+
+    // 自动播放
+
+
+    // 点击dot
+
+
+    // 滚动过渡效果
+
+
+    // 轮播图渲染
+
+
+    // 指示器渲染
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var dots = this.props.dots;
+
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'div',
+        {
+          ref: this.$carousel,
+          className: 'rmc_carousel' },
+        this.renderChildren(),
+        dots ? this.rederDot() : null
+      );
+    }
+  }]);
+
+  return Carousel;
 }(__WEBPACK_IMPORTED_MODULE_5_react__["Component"]);
 
 Carousel.propTypes = {
-    children: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.any.isRequired,
-    autoplay: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool
+  children: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.any.isRequired,
+  autoplay: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool
 };
 Carousel.defaultProps = {
-    dots: true,
-    autoplay: true,
-    edgeEasing: 'linear',
-    speed: 500,
-    interVal: 5000
+  dots: true,
+  autoplay: true,
+  edgeEasing: 'linear',
+  speed: 500, // 速度
+  interVal: 5000 // 切换周期
 };
+
 /* harmony default export */ __webpack_exports__["a"] = (Carousel);
 
 /***/ }),
