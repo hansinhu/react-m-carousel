@@ -1369,6 +1369,8 @@ var Carousel = function (_Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).apply(this, arguments));
 
     _this.initCarousel = function () {
+      var current = _this.$carouselList.current;
+      if (!current) return;
       var childNodes = _this.$carouselList.current.childNodes || [];
       _this.nodeNum = childNodes.length;
       _this.childNum = _this.nodeNum > 2 ? _this.nodeNum - 2 : 0;
@@ -1748,6 +1750,17 @@ var Carousel = function (_Component) {
       if (this.objType(children) === 'Array' && children.length > 1) {
         this.initCarousel();
         window.addEventListener('resize', this.onResize);
+        autoplay && this.startAutoplay();
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(props) {
+      var children = props.children,
+          autoplay = props.autoplay;
+
+      if (children !== this.props.children && this.objType(children) === 'Array' && children.length > 1) {
+        this.initCarousel();
         autoplay && this.startAutoplay();
       }
     }
