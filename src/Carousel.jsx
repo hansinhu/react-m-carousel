@@ -60,6 +60,14 @@ class Carousel extends Component {
     }
   }
 
+  componentWillReceiveProps (props) {
+    let { children, autoplay } = props
+    if (children !== this.props.children && this.objType(children) === 'Array' && children.length > 1) {
+      this.initCarousel()
+      autoplay && this.startAutoplay()
+    }
+  }
+
   getTransitionStyle (ms, x) {
     return {
       transition: `transform ${this.props.edgeEasing} ${ms / 1000}s`,
@@ -71,6 +79,8 @@ class Carousel extends Component {
 
   // 初始化数据
   initCarousel = () => {
+    let current = this.$carouselList.current
+    if (!current) return
     let childNodes = this.$carouselList.current.childNodes || []
     this.nodeNum = childNodes.length
     this.childNum = this.nodeNum > 2 ? this.nodeNum - 2 : 0
