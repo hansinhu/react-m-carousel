@@ -54,19 +54,21 @@ http://localhost:8000/examples/
 
 [![npm download][download-img]][download-url]
 
-
 ## API
 
-### Carousel props
-
-| name     | description    | type     | default      |
-|----------|----------------|----------|--------------|
-|dots | show dots or not | Boolean | true |
-|autoplay | autoplay or not | Boolean | true |
-|edgeEasing | transition type | String | 'linear' |
-|speed | transition speed | Number | 500 |
-|interVal | carousel interVal | Number | 5000 |
-
+属性 | 说明 | 类型 | 默认值
+----|-----|------|------
+| selectedIndex |  手动设置当前显示的索引  |  number  |  0  |
+| indicator | 是否显示指示器 | Boolean   | true |
+| indicatorType | 指示器类型 | String ['dots', 'number']   | 'dots' |
+| autoplay | 是否自动切换 | Boolean   | false |
+| autoplayInterval | 自动切换的时间间隔 | Number | 3000 |
+| dotStyle  | 指示点样式 | Object | 无 |
+| dotActiveStyle  | 激活的指示点样式 | Object | 无 |
+| dotClickSwipe  | 点击指示点切换 | Object | true |
+| speed | 滑动灵敏度 |  number | 500 |
+| beforeChange | 切换面板前的回调函数 | (from: number, to: number): void | 无 |
+| afterChange  | 切换面板后的回调函数 | (current: number): void  | 无 |
 
 ## Test Case
 
