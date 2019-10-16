@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import classNames from 'classnames'
 
 /**
  * @author <xinghanhu@clubfactory.com>
@@ -118,7 +117,7 @@ class Carousel extends Component<CarouselPropsType, any> {
     let frameWidth = frame.clientWidth
     let width = frameWidth * this.nodeNum + 'px'
     // li 的样式
-    let itemStyles = []
+    let itemStyles: any = []
     for (let i = 0; i < this.nodeNum; i++) {
       itemStyles.push({
         width: frameWidth + 'px',
